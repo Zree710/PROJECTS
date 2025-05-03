@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soil & Environment Data Form</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    body {
+      background-color: #f0faf0;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .header {
+      text-align: center;
+      color: #3ba53b;
+      margin-bottom: 1.5rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      padding: 1.5rem;
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+    }
+
+    .card-subtitle {
+      color: #666;
+      font-size: 0.875rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section {
+      margin-bottom: 1.5rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-weight: 600;
+    }
+
+    .slider-container {
+      margin-bottom: 1.5rem;
+    }
+
+    .slider-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    .slider {
+      width: 100%;
+      height: 4px;
+      background: #e0e0e0;
+      outline: none;
+      appearance: none;
+     -webkit-appearance: none;
+     -moz-appearance: none;
+
+      border-radius: 2px;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: white;
+      border: 2px solid #3ba53b;
+      cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: white;
+      border: 2px solid #3ba53b;
+      cursor: pointer;
+    }
+
+    .input-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .input-group {
+      margin-bottom: 1rem;
+    }
+
+    .input-label {
+      display: block;
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .input {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 0.875rem;
+    }
+
+    .input-with-icon {
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .input-with-icon .input {
+      padding-left: 30px;
+    }
+
+    .icon-red {
+      background-color: #f56565;
+    }
+
+    .icon-blue {
+      background-color: #63b3ed;
+    }
+
+    .button {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #3ba53b;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      margin-top: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .button2 {
+      width: 50%;
+      padding: 0.75rem;
+      background-color: #3ba53b;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+
+    .button:hover {
+      background-color: #2c862c;
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .empty-state-icon {
+      font-size: 6rem;
+      color: #bbebbb;
+      margin-bottom: 1rem;
+    }
+
+    .empty-state-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #3ba53b;
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-state-text {
+      color: #666;
+      max-width: 300px;
+      margin: 0 auto;
+    }
+
+    /* Results styling */
+    .results-container {
+      display: none;
+    }
+
+    .results-container.active {
+      display: block;
+    }
+
+    .results-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .results-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #3ba53b;
+    }
+
+    .crop-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .crop-tag {
+      background-color: #dcf5dc;
+      color: #2c862c;
+      padding: 0.25rem 0.75rem;
+      border-radius: 16px;
+      font-size: 0.875rem;
+    }
+
+    .fertilizer-item {
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    .soil-health {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 16px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .health-poor {
+      background-color: #fed7d7;
+      color: #c53030;
+    }
+
+    .health-moderate {
+      background-color: #feebc8;
+      color: #c05621;
+    }
+
+    .health-good {
+      background-color: #c6f6d5;
+      color: #2f855a;
+    }
+
+    .note-item {
+      background-color: #ebf8ff;
+      border-left: 3px solid #4299e1;
+      padding: 0.75rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .loading.active {
+      display: block;
+    }
+
+    .spinner {
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border-left-color: #3ba53b;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .sensor-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+    }
+    .sensor-box {
+            border: 2px solid #4CAF50;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f9f9f9;
+            width: 200px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 class="header">Enter your soil and environmental data to get personalized crop and fertilizer recommendations</h2>
+
+    <div class="grid">
+      <!-- Left Panel - Form -->
+      <div class="card">
+        <h2 class="card-title">Soil & Environment Data</h2>
+        <p class="card-subtitle">Enter your soil NPK values, pH, and environmental conditions</p>
+
+        <form id="soil-data-form">
+          <div class="section">
+            <div class="section-header">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3ba53b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
+                <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
+              </svg>
+              <h3 class="section-title">NPK Values</h3>
+            </div>
+
+            <div class="slider-container">
+              <div class="slider-label">
+                <span>Nitrogen (N)</span>
+                <span id="nitrogen-value">50 kg/ha</span>
+              </div>
+              <input type="range" min="0" max="100" value="50" class="slider" id="nitrogen-slider" name="nitrogen">
+            </div>
+
+            <div class="slider-container">
+              <div class="slider-label">
+                <span>Phosphorus (P)</span>
+                <span id="phosphorus-value">50 kg/ha</span>
+              </div>
+              <input type="range" min="0" max="100" value="50" class="slider" id="phosphorus-slider" name="phosphorus">
+            </div>
+
+            <div class="slider-container">
+              <div class="slider-label">
+                <span>Potassium (K)</span>
+                <span id="potassium-value">50 kg/ha</span>
+              </div>
+              <input type="range" min="0" max="100" value="50" class="slider" id="potassium-slider" name="potassium">
+            </div>
+
+            <div class="slider-container">
+              <div class="slider-label">
+                <span>Soil pH</span>
+                <span id="ph-value">6.5</span>
+              </div>
+              <input type="range" min="0" max="14" value="6.5" step="0.1" class="slider" id="ph-slider" name="ph">
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-header">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4299e1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path>
+                <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path>
+                <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path>
+              </svg>
+              <h3 class="section-title">Environmental Factors</h3>
+            </div>
+
+            <div class="input-grid">
+              <div class="input-group">
+                <label class="input-label" for="rainfall">Rainfall (mm)</label>
+                <input type="number" id="rainfall" name="rainfall" class="input" value="100">
+              </div>
+              <div class="input-group">
+                <label class="input-label" for="temperature">Temperature (°C)</label>
+                <div class="input-with-icon">
+                  <span class="input-icon icon-red"></span>
+                  <input type="number" step="0.1" id="temperature" name="temperature" class="input" value="0">
+                </div>
+              </div>
+              <div class="input-group">
+                <label class="input-label" for="humidity">Humidity (%)</label>
+                <div class="input-with-icon">
+                  <span class="input-icon icon-blue"></span>
+                  <input type="number" id="humidity" name="humidity" class="input" value="50">
+                </div>
+              </div>
+              
+            </div>
+            <div class="input-group">
+              <label class="input-label" for="soil-moisture">Soil Moisture (%)</label>
+              <input type="number" id="soil-moisture" name="soilMoisture" class="input" value="50">
+            </div>
+            
+            <h1>Real-Time Sensor Readings</h1>
+            <div class="sensor-container">
+                <div class="sensor-box">
+                    <h3>Soil Moisture</h3>
+                    <p id='moisture1'>Loading...</p>
+               </div>
+                <div class="sensor-box">
+                    <h3>Temperature</h3>
+                    <p id='temperature1'>Loading...</p>
+                </div>
+                <div class="sensor-box">
+                    <h3>Humidity</h3>
+                    <p id='humidity1'>Loading...</p>
+                </div>
+                
+            </div>
+
+          </div>
+
+          <div style="display: flex; gap: 10px;"><button id="fetchButton" class="button2">Fetch Sensor Values</button>
+
+            
+            <button class="button2" onclick="location.reload();">Reset</button>
+          </div>
+
+
+         <div><button type="submit" class="button">Get Recommendations</button> &nbsp;&nbsp;&nbsp;</div>
+          
+          
+          
+         
+        </form>
+      </div>
+
+      <!-- Right Panel - Results or Empty State -->
+      <div class="card">
+        <!-- Empty State -->
+        <div id="empty-state" class="empty-state">
+          <div class="empty-state-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="#bbebbb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
+              <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
+            </svg>
+          </div>
+          <h3 class="empty-state-title">No Data Yet</h3>
+          <p class="empty-state-text">Fill out the form with your soil and environmental data to get personalized crop and fertilizer recommendations</p>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading" class="loading">
+          <div class="spinner"></div>
+          <p>Analyzing your soil data...</p>
+        </div>
+
+        <!-- Results -->
+        <div id="results" class="results-container">
+          <div class="results-section">
+            <h3 class="results-title">Suitable Crops</h3>
+            <div id="crop-list" class="crop-list">
+              <!-- Crops will be added here -->
+            </div>
+          </div>
+
+          <div class="results-section">
+            <h3 class="results-title">Fertilizer Recommendations</h3>
+            <div id="fertilizer-recommendations">
+              <!-- Fertilizer recommendations will be added here -->
+            </div>
+          </div>
+
+          <div class="results-section">
+            <h3 class="results-title">Soil Health</h3>
+            <div id="soil-health">
+              <!-- Soil health will be added here -->
+            </div>
+          </div>
+
+          <div class="results-section">
+            <h3 class="results-title">Irrigation Advice</h3>
+            <p id="irrigation-advice"></p>
+          </div>
+
+          <div class="results-section">
+            <h3 class="results-title">Additional Notes</h3>
+            <div id="additional-notes">
+              <!-- Additional notes will be added here -->
+          </div> 
+
+          <div class="results-section">
+            <button id="downloadBtn" class="button" >Download PDF</button>
+          </div>
+              
+        
+      </div>
+    </div>
+  </div>
+
+<script>
+
+ async function fetchSensorData() {
+    try {
+        const response = await fetch('http://192.168.131.182:5000/api/moisture');
+        const data = await response.json();
+        console.log("✅ Received Data:", data); // Check if data is correct
+
+        // Ensure elements exist before updating
+        let tempElement = document.getElementById('temperature1');
+        let humElement = document.getElementById('humidity1');
+        let moistElement = document.getElementById('moisture1');
+
+        if (moistElement) {
+            moistElement.textContent = data.moisture;
+            console.log("✅ Moisture Updated:", data.moisture);
+        } else {
+            console.error("❌ Moisture element missing!");
+        }
+
+        if (tempElement) {
+            tempElement.textContent = data.temperature;
+            console.log("✅ Temperature Updated:", data.temperature);
+        } else {
+            console.error("❌ Temperature element missing!");
+        }
+
+        if (humElement) {
+            humElement.textContent = data.humidity;
+            console.log("✅ Humidity Updated:", data.humidity);
+        } else {
+            console.error("❌ Humidity element missing!");
+        }
+
+    } catch (error) {
+        console.error('❌ Error fetching sensor data:', error);
+    }
+  }
+
+
+  // Fetch data every 5 seconds
+       setInterval(fetchSensorData, 5000);
+      fetchSensorData();
+
+
+
+
+
+
+    // Update slider values
+    const nitrogenSlider = document.getElementById('nitrogen-slider');
+    const nitrogenValue = document.getElementById('nitrogen-value');
+    nitrogenSlider.oninput = function() {
+      nitrogenValue.textContent = this.value + ' kg/ha';
+    }
+
+    const phosphorusSlider = document.getElementById('phosphorus-slider');
+    const phosphorusValue = document.getElementById('phosphorus-value');
+    phosphorusSlider.oninput = function() {
+      phosphorusValue.textContent = this.value + ' kg/ha';
+    }
+
+    const potassiumSlider = document.getElementById('potassium-slider');
+    const potassiumValue = document.getElementById('potassium-value');
+    potassiumSlider.oninput = function() {
+      potassiumValue.textContent = this.value + ' kg/ha';
+    }
+
+    const phSlider = document.getElementById('ph-slider');
+    const phValue = document.getElementById('ph-value');
+    phSlider.oninput = function() {
+      phValue.textContent = this.value;
+    }
+
+    // Form submission
+    const form = document.getElementById('soil-data-form');
+    const emptyState = document.getElementById('empty-state');
+    const loadingState = document.getElementById('loading');
+    const resultsContainer = document.getElementById('results');
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+     
+
+      // Show loading state
+      emptyState.style.display = 'none';
+      loadingState.classList.add('active');
+      resultsContainer.classList.remove('active');
+      
+      // Get form data
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      
+      // Convert input values to float
+       Object.keys(data).forEach(key => {
+           data[key] = parseFloat(data[key]);
+      });
+
+      
+
+      try {
+    const response = await fetch('http://127.0.0.1:5000/api/recommendations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+    console.log("API Response:", result); // ✅ Log response
+
+    if (!Array.isArray(result.suitableCrops)) {
+        console.error("Error: suitableCrops is not an array", result.suitableCrops);
+        alert("Unexpected response format!");
+        return;
+    }
+
+    displayResults(result);  // Proceed if correct format
+
+   } catch (error) {
+    console.error("Error fetching recommendations:", error);
+    alert("Error: " + error.message);
+  }
+
+   });
+    // ✅ Function to display results
+function displayResults(data) {
+    console.log("Final API Response:", data); // ✅ Debugging
+
+    if (!data || typeof data !== "object") {
+        console.error("Error: Invalid result object", data);
+        return;
+    }
+
+    // ✅ Hide loading & show results
+    document.getElementById("loading").classList.remove("active");
+    document.getElementById("results").classList.add("active");
+
+    // ✅ Display suitable crops
+    const cropList = document.getElementById("crop-list");
+    cropList.innerHTML = "";
+    if (Array.isArray(data.suitableCrops)) {
+        data.suitableCrops.forEach((crop) => {
+            const cropTag = document.createElement("div");
+            cropTag.className = "crop-tag";
+            cropTag.textContent = crop;
+            cropList.appendChild(cropTag);
+        });
+    } else {
+        cropList.innerHTML = "<p>No suitable crops found.</p>";
+    }
+
+    // ✅ Display fertilizer recommendations
+    const fertilizerElement = document.getElementById("fertilizer-recommendations");
+    fertilizerElement.innerHTML = "";
+    if (data.fertilizerRecommendations) {
+        Object.entries(data.fertilizerRecommendations).forEach(([nutrient, recommendation]) => {
+            const item = document.createElement("div");
+            item.className = "fertilizer-item";
+            item.textContent = `${nutrient.charAt(0).toUpperCase() + nutrient.slice(1)}: ${recommendation}`;
+            fertilizerElement.appendChild(item);
+        });
+    }
+
+    // ✅ Display soil health
+    const soilHealthElement = document.getElementById("soil-health");
+    soilHealthElement.innerHTML = "";
+    if (data.soilHealth) {
+        const healthSpan = document.createElement("span");
+        healthSpan.textContent = data.soilHealth;
+        healthSpan.className = `soil-health health-${data.soilHealth.toLowerCase()}`;
+        soilHealthElement.appendChild(healthSpan);
+    }
+
+    // ✅ Display irrigation advice
+    document.getElementById("irrigation-advice").textContent = data.irrigationAdvice || "No advice available.";
+
+    // ✅ Display additional notes
+    const notesElement = document.getElementById("additional-notes");
+    notesElement.innerHTML = "";
+    if (Array.isArray(data.additionalNotes) && data.additionalNotes.length > 0) {
+        data.additionalNotes.forEach((note) => {
+            const noteItem = document.createElement("div");
+            noteItem.className = "note-item";
+            noteItem.textContent = note;
+            notesElement.appendChild(noteItem);
+        });
+    } else {
+        notesElement.innerHTML = "<p>No additional notes.</p>";
+    }
+}
+
+    
+
+
+    // For demo purposes - simulate backend if not available
+    // This function can be used to test the UI without a backend
+    function simulateBackendResponse() {
+      return {
+        suitableCrops: ['Tomatoes', 'Peppers', 'Beans', 'Corn', 'Carrots'],
+        fertilizerRecommendations: {
+          nitrogen: 'Add 10 kg/ha of nitrogen fertilizer',
+          phosphorus: 'Phosphorus levels are sufficient',
+          potassium: 'Add 5 kg/ha of potassium fertilizer'
+        },
+        soilHealth: 'Moderate',
+        irrigationAdvice: 'Soil moisture is optimal. Maintain current irrigation schedule.',
+        additionalNotes: [
+          'Consider crop rotation to improve soil health.',
+          'Adding organic matter would benefit your soil structure.'
+        ]
+      };
+    }
+
+    
+   
+  </script>
+  <script>
+   window.onload = function() {
+    document.getElementById("fetchButton").addEventListener("click", function(event) {
+        event.stopPropagation(); // Stops any unintended event bubbling
+        event.preventDefault(); // Prevents form submission (if inside a form)
+        // Get live sensor readings
+        let tempElement = document.getElementById('temperature1').innerText;
+        let moistureElement = document.getElementById('moisture1').innerText;
+        let humidityElement = document.getElementById('humidity1').innerText;
+
+          // Ensure elements exist before reading values
+          if (!tempElement || !moistureElement || !humidityElement) {
+            console.error("One or more sensor elements are missing!");
+            return;
+        }
+
+        let temperature = Math.round(parseFloat(tempElement.innerText)); // Convert to int
+
+        // Set input fields with sensor values
+        document.getElementById("temperature").value = tempElement;
+        document.getElementById("soil-moisture").value = moistureElement;
+        document.getElementById("humidity").value = humidityElement;
+    });
+    console.log("Fetch button clicked, sensor values updated!");
+   };  
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+    let downloadBtn = document.getElementById("downloadBtn");
+    
+    if (downloadBtn) {
+        downloadBtn.addEventListener("click", downloadPDF);
+    } else {
+        console.error("❌ Error: Download button not found! Check the ID in index.html.");
+    }
+    });
+
+   function downloadPDF() {
+     const { jsPDF } = window.jspdf;  // Load jsPDF
+
+     // Capture the entire visible page
+     html2canvas(document.body, { scale: 2 }).then(canvas => {
+         const imgData = canvas.toDataURL("image/png");  // Convert to image
+
+         const pdf = new jsPDF("p", "mm", "a4");  // Create PDF object
+         const imgWidth = 210;  // A4 width in mm
+         const imgHeight = (canvas.height * imgWidth) / canvas.width;  // Scale height
+
+         pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);  // Add image to PDF
+         pdf.save("Crop_Recommendation_Report.pdf");  // Save as PDF
+    });
+}
+  </script>
+   
+
+</body>
+</html>
